@@ -30,14 +30,11 @@
 
 (define-syntax type
   (syntax-rules ()
-    ((_ (ident))
-     (fail "Expected a type name in 'type'!"))
     ((_ (ident type-name) . rest)
      (cons (maybe `((quote ident) (quote type-name)))
 	   (type . rest)))
     ((_ (ident type-name))
      (maybe (ident type-name)))
-    ((_ unexpected rest...) (fail "Unexpected value in 'type'!\n"))
     ((_) '())))
 
 (define-syntax instance
