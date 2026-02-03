@@ -39,11 +39,11 @@
 
 (define-syntax type-check
   (syntax-rules (list number string char procedure)
-    ((_ x list) '(x list))
-    ((_ x number) '(x number))
-    ((_ x string) '(x string))
-    ((_ x char) '(x char))
-    ((_ x procedure) '(x procedure))))
+    ((_ x list) '(x list?))
+    ((_ x number) '(x number?))
+    ((_ x string) '(x string?))
+    ((_ x char) '(x char?))
+    ((_ x procedure) '(x procedure?))))
 
 (define-syntax type
   (syntax-rules ()
