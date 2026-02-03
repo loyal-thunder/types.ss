@@ -28,7 +28,7 @@
        (list ident type-name is)))))
 
 
-(define-syntax type
+(define-syntax type-old
   (syntax-rules ()
     ((_ (ident type-name) . rest)
      (cons (maybe `((quote ident) (quote type-name)))
@@ -37,7 +37,20 @@
      (maybe (ident type-name)))
     ((_) '())))
 
-(define-syntax instance
+(define-syntax type-check
+  (syntax-rules (list number string char procedure)
+    ((_ x list) '(x list))
+    ((_ x number) '(x number))
+    ((_ x string) '(x string))
+    ((_ x char) '(x char))
+    ((_ x procedure) '(x procedure))))
+
+(define-syntax type
+  (syntax-rules ()
+    ((_ (ident type-name)...)
+     (list (type-check ident type-name)...))))
+
+(define-syntax instance-old
   (syntax-rules (of)
     ((_ (ident value) of defs)
      (let* ((p (lambda (trip) (equal? (car trip) (quote ident))))
@@ -45,7 +58,7 @@
 	    (ret? (not (equal? left '()))))
        (if ret?
 	   (list (quote ident) (kind value) ((caddar left) value))
-	   (fail "Error!\n"))))))
+	   (fail (format "Error!\n ~a\n~a\n" '(ident value defs) defs)))))))
 
 (define (bind-list xs ys)
   (if (null? xs)
@@ -74,11 +87,13 @@
 	       body)
 	     (match (value of t) tail))))))
 
-(define t (type (Num number)
-		(Str string)
-		(Seq list)
-		(Char char)
-		(Fun procedure)))
+(define t
+  (type
+   (Num number)
+   (Str string)
+   (Seq list)
+   (Char char)
+   (Fun procedure)))
 
 (define int (instance (Num 5) of t))
 ;; matching on integers!
