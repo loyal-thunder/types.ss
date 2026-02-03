@@ -62,7 +62,7 @@
   (lambda (x)
     (syntax-case x (of else)
       ((_ (value of t)) #f)
-      ((_ (value of t) (else . (body . ())))
+      ((_ (value of t) (else body))
        #'body)
       ((_ (value of t) ((opt-id (xs ...)) body) tail)
        #'(if (equal? (car value) 'opt-id)
