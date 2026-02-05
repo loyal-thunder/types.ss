@@ -39,16 +39,25 @@
 
 (define-syntax type-check
   (syntax-rules (list number string char procedure)
-    ((_ x list) '(x list?))
-    ((_ x number) '(x number?))
-    ((_ x string) '(x string?))
-    ((_ x char) '(x char?))
-    ((_ x procedure) '(x procedure?))))
+    ((_ x list) ('x . list?))
+    ((_ x number) ('x . number?))
+    ((_ x string) ('x . string?))
+    ((_ x char) ('x . char?))
+    ((_ x procedure) ('x . procedure?))))
 
 (define-syntax type
   (syntax-rules ()
     ((_ (ident type-name)...)
      (list (type-check ident type-name)...))))
+
+(define-syntax instance
+  (syntax-rules (of)
+    ((_ (ident value) of defs)
+     (let ((f (assoc ident defs)))
+       (or (and f (f value) (list 'ident value defs))
+	   (fail
+	    (display
+	     "Failed predicate ~a for ~a\n" f value)))))))
 
 (define-syntax instance-old
   (syntax-rules (of)
