@@ -16,7 +16,7 @@
 
       ;; predicate with a pattern list to bind.
       ;; example:
-      ;; (match x ((list? (a b c)) (+ a b c d)))
+      ;; (match x ((list? (a b c d)) (+ a b c d)))
       
       ((_ value ((p? (v . vs...)) body...) . tail...)
        #'(let* ((l '(v . vs...)) (len-l (length l)))
