@@ -9,15 +9,10 @@
       ((_ value (else body...)) #'(begin body...)) ;; base case: else-branch found
 
       ;; predicate without a pattern variable to bind.
-      ;; example:
-      ;; (match x ((null?) "empty list!"))
       ((_ value ((p?) body...) . tail...)
        #'(if (p? value) (begin body...) (match . (value . tail...))))
 
       ;; predicate with a pattern list to bind.
-      ;; example:
-      ;; (match x ((list? (a b c d)) (+ a b c d)))
-      
       ((_ value ((p? (v . vs...)) body...) . tail...)
        #'(let* ((l '(v . vs...)) (len-l (length l)))
 	       (if (and (p? value) (p? l) (= (length value) len-l))
@@ -25,9 +20,6 @@
 		   (match . (value . tail...)))))
 
       ;; predicate with a single pattern variable to bind.
-      ;; example:
-      ;; (match x ((integer? n) (+ n 1)))
-      
       ((_ value ((p? v) body...) . tail...)
        #'(if (p? value)
 	     ((lambda (v) body...) value)
