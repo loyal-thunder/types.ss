@@ -10,8 +10,8 @@
 
       ;; predicate without a pattern variable to bind.
       ;; example:
-      ;; (match x ((null?) "empty list!"))
-      ((_ value ((p?) body...) . tail...)
+      ;; (match x (null? "empty list!"))
+      ((_ value (p? body...) . tail...)
        #'(if (p? value) (begin body...) (match . (value . tail...))))
 
       ;; predicate with a pattern list to bind.
@@ -40,7 +40,7 @@
 
 (define (foo x)
   (match x
-    ((null?) 0)
+    (null? 0)
     ((integer? n) 1)
     ((string? s) 2)
     ((list? (a b c)) 3)
